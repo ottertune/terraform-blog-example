@@ -1,0 +1,45 @@
+name: Daily Parameter Update
+
+on:
+  schedule:
+    - cron: '0 0 * * *' # Schedule the workflow to run daily at midnight UTC
+
+jobs:
+  update_and_commit:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.x
+
+      - name: Run Python script
+        run: |
+          python update_parameters.py
+
+      - name: Commit changes
+        run: |
+          git config user.email "you@example.com"
+          git config user.name "Your Name"
+          git add db_params.tf
+          git commit -m "AI knob updates"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN}}
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: 1.0.8 # Replace with your desired Terraform version
+
+      - name: Initialize Terraform
+        run: terraform init
+
+      - name: Apply Terraform changes
+        # CAUTION: -auto-approve may override changes to the infra
+        # that are not saved in the terraform files
+        run: terraform apply -auto-approve
