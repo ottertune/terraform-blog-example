@@ -1,11 +1,15 @@
 import requests
+import json
 import os
+import re
+import sys
 
-# Replace with your actual OtterTune API key
+
+# Your OtterTune API key
 ottertune_api_key = os.environ['OT_API_KEY']
 
-# Replace with the desired database identifier
-db_identifier = 'education'
+# Your database identifier
+db_identifier = os.environ['DB_IDENTIFIER']
 
 # Base URL for the OtterTune API
 base_url = 'https://service.ottertune.com/api'
@@ -16,6 +20,10 @@ headers = {'OT-API-KEY': ottertune_api_key}
 
 # Replace with your config file name
 terraform_file_path = 'db_params.tf'
+
+# Regex patterns to match parameter 'name' and 'value' lines
+name_pattern = re.compile(r'name\s*=\s*"?([^"\n]+)"?')
+value_pattern = re.compile(r'value\s*=\s*"?([^"\n]+)"?')
 
 try:
     response = requests.get(databases_url, headers=headers)
@@ -45,6 +53,8 @@ try:
             knob_final_value = recommendation['knobFinalValue']
             knob_recommendations[knob_name] = knob_final_value
 
+        print(f"KNOB_RECOMMENDATIONS = {json.dumps(knob_recommendations, indent=4, default=str)}\n")
+
         if len(knob_recommendations) > 0:
             with open(terraform_file_path, 'r') as file:
                 terraform_config = file.read()
@@ -63,11 +73,14 @@ try:
                     param_name = None
                     param_value = None
                     while not line.strip().startswith("}"):
-                        if line.strip().startswith("name"):
-                            param_name = line.split("=")[1].strip('" ')
-                        elif line.strip().startswith("value"):
-                            param_value = line.split("=")[1].strip('" ')
-                        assert param_name is not None
+                        name_match = name_pattern.search(line)
+                        if name_match:
+                            param_name = name_match.group(1)
+
+                        value_match = value_pattern.search(line)
+                        if value_match:
+                            param_value = value_match.group(1)
+
                         line = config_lines[i]
                         i += 1
 
@@ -92,13 +105,16 @@ try:
             with open(terraform_file_path, 'w') as file:
                 file.write(modified_terraform_config)
 
-            print("Terraform configuration file (main.tf) has been updated with knob recommendations.")
+            print(f"Terraform configuration file ({terraform_file_path}) has been updated with knob recommendations.")
         else:
             print("No knob recommendations found for this database.")
     else:
-        print(f'Database with dbIdentifier "{db_identifier}" not found.')
+        print(f'Error: Database with dbIdentifier "{db_identifier}" not found.')
+        sys.exit(1)
 
 except requests.exceptions.RequestException as e:
     print(f'Error making HTTP request: {e}')
+    sys.exit(1)
 except Exception as e:
     print(f'An error occurred: {e}')
+    sys.exit(1)

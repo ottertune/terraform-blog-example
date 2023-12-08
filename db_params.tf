@@ -1,18 +1,17 @@
-resource "aws_db_parameter_group" "education" {
-  name   = "education"
-  family = "postgres14"
+# AWS RDS PostgreSQL Parameter Group Configuration
 
-  parameter {
-    name  = "log_connections"
-    value = "1"
-  }
+resource "aws_db_parameter_group" "terraform_blog_example" {
+  name   = "terraform-blog-example-pg" # Name of the DB parameter group
+  family = "postgres15"                # Database family (PostgreSQL 15.x in this case)
+
+  # Below are OtterTune's recommended knobs for tuning RDS PostgreSQL 15 performance.
+  # They are initially set to their default values when the RDS instance is created.
+  # After completing the steps in the blog article, these DB parameter group settings
+  # will be updated daily with OtterTune's latest knob recommendations.
+
   parameter {
     name  = "autovacuum_vacuum_cost_delay"
     value = "2"
-  }
-  parameter {
-    name  = "autovacuum_vacuum_cost_limit"
-    value = "200"
   }
   parameter {
     name  = "autovacuum_vacuum_scale_factor"
