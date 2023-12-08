@@ -2,10 +2,10 @@ import requests
 import os
 
 # Replace with your actual OtterTune API key
-ottertune_api_key = os.environ['OT-API-KEY']
+ottertune_api_key = os.environ['OT_API_KEY']
 
 # Replace with the desired database identifier
-db_identifier = 'YOUR_DB_IDENTIFIER'
+db_identifier = 'education'
 
 # Base URL for the OtterTune API
 base_url = 'https://service.ottertune.com/api'
@@ -63,10 +63,11 @@ try:
                     param_name = None
                     param_value = None
                     while not line.strip().startswith("}"):
-                        if line.strip().startswith("name = "):
-                            param_name = line.strip().split(" = ")[1].strip('""')
-                        elif line.strip().startswith("value = "):
-                            param_value = line.strip().split(" = ")[1].strip('""')
+                        if line.strip().startswith("name"):
+                            param_name = line.split("=")[1].strip('" ')
+                        elif line.strip().startswith("value"):
+                            param_value = line.split("=")[1].strip('" ')
+                        assert param_name is not None
                         line = config_lines[i]
                         i += 1
 
