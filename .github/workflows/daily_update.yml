@@ -47,13 +47,13 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
       - name: Commit changes
-          run: |
-            git status
-            git config user.email "priyankbhandia@gmail.com"
-            git config user.name "priyank96"
-            git add db_params.tf
-            git commit -m "AI knob updates"
-            git push
-          env:
-            GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}  # GitHub access token
+        run: |
+          git status
+          git config user.email "priyankbhandia@gmail.com"
+          git config user.name "priyank96"
+          git add db_params.tf
+          git commit -m "AI knob updates"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}  # GitHub access token
 
