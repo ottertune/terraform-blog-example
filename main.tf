@@ -9,6 +9,10 @@ provider "aws" {
 # Set environment variable `TF_VAR_db_password="your_secure_password"`
 variable "db_password" {}
 
+import {
+  to = aws_db_instance.terraform_blog_example
+  id = "terraform-blog-example"
+}
 
 # AWS RDS PostgreSQL instance creation using Terraform
 resource "aws_db_instance" "terraform_blog_example" {

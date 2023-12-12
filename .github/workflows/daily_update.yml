@@ -34,12 +34,6 @@ jobs:
         with:
           terraform_version: 1.6.5 # Replace with your desired Terraform version
 
-      - name: Import Database into Terraform
-        run: terraform import aws_db_instance.terraform_blog_example terraform-blog-example
-
-      - name: Import Parameter group into Terraform
-        run: terraform import aws_db_parameter_group.terraform_blog_example terraform-blog-example-pg
-
       - name: Initialize Terraform
         run: terraform init
 
