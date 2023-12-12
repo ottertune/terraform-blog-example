@@ -29,7 +29,7 @@ resource "aws_db_instance" "terraform_blog_example" {
 
   publicly_accessible     = true  # Whether the DB instance is accessible from the internet
   backup_retention_period = "0"   # The number of days to retain backups ('0' disables backups)
-  skip_final_snapshot     = true  # Whether to create final snapshot before the DB instance is deleted
+  skip_final_snapshot     = true  # Whether to skip creation of final snapshot before the DB instance is deleted
   multi_az                = false # Whether to replicate the DB instance across multiple AZs for high availability
 
   # Optional settings
