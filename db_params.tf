@@ -68,7 +68,7 @@ resource "aws_db_parameter_group" "terraform_blog_example" {
   }
   parameter {
     name  = "wal_writer_delay"
-    value = "200"
+    value = "250"
   }
   parameter {
     name  = "work_mem"
