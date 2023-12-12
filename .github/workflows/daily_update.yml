@@ -3,6 +3,7 @@ name: Daily Parameter Update
 on:
   schedule:
     - cron: '0 0 * * *' # Schedule the workflow to run daily at midnight UTC
+  workflow_dispatch:
 
 jobs:
   update_and_commit:
@@ -17,29 +18,42 @@ jobs:
         with:
           python-version: 3.x
 
+      - name: Install Python Packages
+        run: |
+          pip install -r requirements.txt
+
       - name: Run Python script
         run: |
           python update_parameters.py
-
-      - name: Commit changes
-        run: |
-          git config user.email "you@example.com"
-          git config user.name "Your Name"
-          git add db_params.tf
-          git commit -m "AI knob updates"
-          git push
         env:
-          GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN}}
+          DB_IDENTIFIER: "terraform-blog-example"
+          OT_API_KEY: ${{ secrets.OT_API_KEY }}
 
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v1
         with:
-          terraform_version: 1.0.8 # Replace with your desired Terraform version
+          terraform_version: 1.6.5 # Replace with your desired Terraform version
 
       - name: Initialize Terraform
         run: terraform init
 
       - name: Apply Terraform changes
         # CAUTION: -auto-approve may override changes to the infra
-        # that are not saved in the terraform files
+        # that are not saved in the terraform files 
         run: terraform apply -auto-approve
+        env:
+          TF_VAR_db_password: ${{ secrets.DB_PASSWORD }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+      - name: Commit changes
+        run: |
+          git status
+          git config user.email "priyankbhandia@gmail.com"
+          git config user.name "priyank96"
+          git add db_params.tf
+          git commit -m "AI knob updates"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}  # GitHub access token
+
