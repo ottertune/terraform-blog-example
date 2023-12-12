@@ -3,6 +3,7 @@ name: Daily Parameter Update
 on:
   schedule:
     - cron: '*/1 * * * *' # Schedule the workflow to run daily at midnight UTC
+  workflow_dispatch:
 
 jobs:
   update_and_commit:
