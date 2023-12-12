@@ -37,6 +37,12 @@ jobs:
       - name: Initialize Terraform
         run: terraform init
 
+      - name: Import Database into Terraform
+        run: terraform import aws_db_instance.terraform_blog_example terraform-blog-example
+
+      - name: Import Parameter group into Terraform
+        run: terraform import aws_db_parameter_group.terraform_blog_example terraform-blog-example-pg
+
       - name: Apply Terraform changes
         # CAUTION: -auto-approve may override changes to the infra
         # that are not saved in the terraform files 
