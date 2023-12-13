@@ -55,8 +55,8 @@ jobs:
         if: steps.verify_diff.outputs.changed == 'true'
         run: |
           git status
-          git config user.email "priyankbhandia@gmail.com"
-          git config user.name "priyank96"
+          git config user.email "name@mail.com"  # Github email
+          git config user.name "user"  # Github username
           git add db_params.tf
           git commit -m "AI knob updates"
           git push
