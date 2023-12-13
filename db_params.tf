@@ -16,55 +16,55 @@ resource "aws_db_parameter_group" "terraform_blog_example" {
 
   parameter {
     name  = "autovacuum_vacuum_cost_delay"
-    value = "2"
+    value = "7"
   }
   parameter {
     name  = "autovacuum_vacuum_scale_factor"
-    value = "0.1"
+    value = "0.12"
   }
   parameter {
     name  = "autovacuum_vacuum_threshold"
-    value = "50"
+    value = "439"
   }
   parameter {
     name  = "bgwriter_delay"
-    value = "200"
+    value = "90"
   }
   parameter {
     name  = "bgwriter_lru_maxpages"
-    value = "100"
+    value = "442"
   }
   parameter {
     name  = "bgwriter_lru_multiplier"
-    value = "2"
+    value = "2.89"
   }
   parameter {
     name  = "checkpoint_completion_target"
-    value = "0.9"
+    value = "0.81"
   }
   parameter {
     name  = "default_statistics_target"
-    value = "100"
+    value = "762"
   }
   parameter {
     name  = "effective_cache_size"
-    value = "47626"
+    value = "53043"
   }
   parameter {
     name  = "effective_io_concurrency"
-    value = "1"
+    value = "213"
   }
   parameter {
     name  = "max_wal_size"
-    value = "2048"
+    value = "2410"
   }
   parameter {
     name  = "random_page_cost"
-    value = "4"
+    value = "1.6"
   }
   parameter {
     name  = "temp_buffers"
-    value = "1024"
+    value = "2452"
   }
   parameter {
     name  = "wal_writer_delay"
