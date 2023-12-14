@@ -55,6 +55,8 @@ try:
 
         print(f"KNOB_RECOMMENDATIONS = {json.dumps(knob_recommendations, indent=4, default=str)}\n")
 
+        # We have some new knob values from OtterTune which we need to update
+        # in our terraform file
         if len(knob_recommendations) > 0:
             with open(terraform_file_path, 'r') as file:
                 terraform_config = file.read()
@@ -68,6 +70,13 @@ try:
                 line = config_lines[i]
 
                 # Check if the line contains the parameter definition
+                # parameter definitions look like:
+                # parameter {
+                #  name = "param_name"
+                #  value = "param_value"
+                # }
+                # Note: This script will only update those parameters that are present
+                # in the parameter configuration file, other recommendations will be ignored
                 if line.strip().startswith("parameter {"):
                     # Extract the parameter name and value
                     param_name = None
@@ -84,6 +93,7 @@ try:
                         line = config_lines[i]
                         i += 1
 
+                    # the parameter in the terraform configuration has a new recommended value
                     if param_name in knob_recommendations:
                         # Replace the parameter value with the new value
                         param_value = knob_recommendations[param_name]

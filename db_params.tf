@@ -1,5 +1,10 @@
 # AWS RDS PostgreSQL Parameter Group Configuration
 
+import {
+  to = aws_db_parameter_group.terraform_blog_example
+  id = "terraform-blog-example-pg"
+}
+
 resource "aws_db_parameter_group" "terraform_blog_example" {
   name   = "terraform-blog-example-pg" # Name of the DB parameter group
   family = "postgres15"                # Database family (PostgreSQL 15.x in this case)

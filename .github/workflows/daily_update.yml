@@ -46,11 +46,17 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
+      - name: Check if there are any changes
+        id: verify_diff
+        run: |
+          git diff --quiet . || echo "changed=true" >> $GITHUB_OUTPUT
+
       - name: Commit changes
+        if: steps.verify_diff.outputs.changed == 'true'
         run: |
           git status
-          git config user.email "priyankbhandia@gmail.com"
-          git config user.name "priyank96"
+          git config user.email "name@mail.com"  # Github email
+          git config user.name "user"  # Github username
           git add db_params.tf
           git commit -m "AI knob updates"
           git push
